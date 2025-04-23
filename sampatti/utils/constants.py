@@ -56,6 +56,17 @@ class AppModel:
         "model_name": "User",
     }
 
+    # Banking App Labels
+
+    BANK = {
+        "app_label": "banking",
+        "model_name": "Bank",
+    }
+    BRANCH = {
+        "app_label": "banking",
+        "model_name": "Branch",
+    }
+
 
 class FormClass:
     TEXT_INPUT = "validator input w-full input-primary"
