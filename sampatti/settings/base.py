@@ -1,0 +1,10 @@
+from settings.conf import *  # noqa
+from settings.rest_framework import *  # noqa
+from settings.cache import *  # noqa
+from settings.django_rq import *  # noqa
+from settings.installed_apps import *  # noqa
+from settings.logging import *  # noqa
+from settings.middlewares import *  # noqa
+from settings.password_validators import *  # noqa
+from settings.static import *  # noqa
+from settings.templates import *  # noqa
