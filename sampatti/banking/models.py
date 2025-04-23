@@ -5,6 +5,7 @@ from django_extensions.db.models import (
 )
 from django.db import models
 from cities_light.models import City
+from banking.constants import AccountType
 
 
 class Bank(TimeStampedModel, TitleDescriptionModel, ActivatorModel):
@@ -16,7 +17,7 @@ class Bank(TimeStampedModel, TitleDescriptionModel, ActivatorModel):
         return self.title
 
 
-class Branch(TimeStampedModel, TitleDescriptionModel, ActivatorModel):
+class Branch(TimeStampedModel, ActivatorModel):
     """
     Model representing a bank branch.
     """
@@ -35,4 +36,46 @@ class Branch(TimeStampedModel, TitleDescriptionModel, ActivatorModel):
     )
 
     def __str__(self):
-        return f"{self.title} - {self.bank.title}"
+        return f"{self.bank.title}"
+
+
+class Account(TimeStampedModel, ActivatorModel):
+    """
+    Model representing a bank account.
+    """
+
+    user = models.ForeignKey(
+        "users.User", on_delete=models.CASCADE, related_name="accounts"
+    )
+    branch = models.ForeignKey(
+        "banking.Branch", on_delete=models.CASCADE, related_name="accounts"
+    )
+    account_type = models.CharField(
+        max_length=10, choices=AccountType.CHOICES, default=AccountType.SAVINGS
+    )
+    account_number = models.CharField(max_length=20, unique=True)
+    balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.account_number}"
+
+
+class Loan(TimeStampedModel, ActivatorModel):
+    """
+    Model representing a loan.
+    """
+
+    user = models.ForeignKey(
+        "users.User", on_delete=models.CASCADE, related_name="loans"
+    )
+    branch = models.ForeignKey(
+        "banking.Branch", on_delete=models.CASCADE, related_name="loans"
+    )
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    interest_rate = models.DecimalField(max_digits=5, decimal_places=2)
+    tenure = models.IntegerField()
+    emi = models.DecimalField(max_digits=10, decimal_places=2)
+    emi_date = models.DateField()
+
+    def __str__(self):
+        return f"{self.user.username} - {self.amount}"
