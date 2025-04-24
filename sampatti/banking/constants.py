@@ -24,3 +24,7 @@ class ValidationErrors:
     BANK_NOT_FOUND = _("Bank not found")
     BRANCH_ID_REQUIRED = _("Branch id is required")
     BRANCH_NOT_FOUND = _("Branch Not Found")
+    CITY_ID_REQUIRED = _("City id is required")
+    CITY_NOT_FOUND = _("City Not Found")
+    ACCOUNT_ID_REQUIRED = _("Account id is required")
+    ACCOUNT_NOT_FOUND = _("Account Not Found")

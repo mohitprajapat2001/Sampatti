@@ -3,6 +3,7 @@ from utils.utils import get_model
 from utils.constants import AppModel
 from django.contrib.auth.password_validation import validate_password
 from users.constants import ValidationErrors
+from utils.serializers import CustomForeignKeySerializer
 
 User = get_model(**AppModel.USER)
 UserDetail = get_model(**AppModel.USER_DETAIL)
@@ -64,10 +65,9 @@ class UserSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
-class UserDetailSerializer(serializers.ModelSerializer):
+class UserDetailSerializer(CustomForeignKeySerializer):
     user = UserSerializer(
         read_only=True,
-        default=serializers.CurrentUserDefault(),
     )
 
     class Meta:
@@ -85,7 +85,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
         )
 
 
-class ProfileSerializer(serializers.ModelSerializer):
+class ProfileSerializer(CustomForeignKeySerializer):
     user = UserSerializer(read_only=True)
 
     class Meta:
@@ -98,7 +98,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         )
 
 
-class AddressSerializer(serializers.ModelSerializer):
+class AddressSerializer(CustomForeignKeySerializer):
     user = UserSerializer(read_only=True)
 
     class Meta:
@@ -114,7 +114,7 @@ class AddressSerializer(serializers.ModelSerializer):
         )
 
 
-class EmergencyDetailsSerializer(serializers.ModelSerializer):
+class EmergencyDetailsSerializer(CustomForeignKeySerializer):
     user = UserSerializer(read_only=True)
 
     class Meta:
@@ -128,7 +128,7 @@ class EmergencyDetailsSerializer(serializers.ModelSerializer):
         )
 
 
-class SecurityQuestionSerializer(serializers.ModelSerializer):
+class SecurityQuestionSerializer(serializers.ModelSerCustomForeignKeySerializerializer):
     user = UserSerializer(read_only=True)
 
     class Meta:
