@@ -1,14 +1,14 @@
 from utils.utils import get_model
 from utils.constants import AppModel
-from rest_framework import serializers
 from users.api.serializers import UserSerializer
 from banking.api.serializers import AccountSerializer
+from utils.serializers import CustomForeignKeySerializer
 
 Card = get_model(**AppModel.CARD)
 GiftCard = get_model(**AppModel.GIFTCARD)
 
 
-class CardSerializer(serializers.ModelSerializer):
+class CardSerializer(CustomForeignKeySerializer):
     user = UserSerializer(read_only=True)
     account = AccountSerializer(read_only=True)
 
@@ -28,14 +28,8 @@ class CardSerializer(serializers.ModelSerializer):
             "card_number": {"read_only": True},
         }
 
-    def validate(self, attrs):
-        attrs = super().validate(attrs)
-        attrs["user_id"] = self.initial_data.get("user_id")
-        attrs["account_id"] = self.initial_data.get("account_id")
-        return attrs
 
-
-class GiftCardSerializer(serializers.ModelSerializer):
+class GiftCardSerializer(CustomForeignKeySerializer):
     user = UserSerializer(read_only=True)
 
     class Meta:
@@ -50,8 +44,3 @@ class GiftCardSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "card_number": {"read_only": True},
         }
-
-    def validate(self, attrs):
-        attrs = super().validate(attrs)
-        attrs["user_id"] = self.initial_data.get("user_id")
-        return attrs

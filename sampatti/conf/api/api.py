@@ -26,8 +26,8 @@ class CitySerializer(serializers.ModelSerializer):
             "id",
             "display_name",
             "name_ascii",
-            "country__display_name",
-            "region__display_name",
+            "country",
+            "region",
             "latitude",
             "longitude",
         )

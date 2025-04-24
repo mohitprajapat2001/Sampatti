@@ -27,15 +27,19 @@ router = DefaultRouter()
 # Default Router for API
 
 router.register("cities", CityListViewSet)
-router.register("cardtypes", CardTypeListViewSet)
-router.register("accounttypes", AccountTypeListViewSet)
-router.register("addresstypes", AddressTypeListViewSet)
-router.register("accountstatus", AccountStatusListViewSet)
-router.register("genders", GenderChoicesListViewSet)
-router.register("marritialstatus", MarritialStatusListViewSet)
-router.register("questions", QuestionChoicesListViewSet)
-router.register("transactiontypes", TransactionTypeListViewSet)
-router.register("relationship", RelationshipChoicesListViewSet)
+router.register("cardtypes", CardTypeListViewSet, basename="cardtypes")
+router.register("accounttypes", AccountTypeListViewSet, basename="accounttypes")
+router.register("addresstypes", AddressTypeListViewSet, basename="addresstypes")
+router.register("accountstatus", AccountStatusListViewSet, basename="accountstatus")
+router.register("genders", GenderChoicesListViewSet, basename="genders")
+router.register(
+    "marritialstatus", MarritialStatusListViewSet, basename="marritialstatus"
+)
+router.register("questions", QuestionChoicesListViewSet, basename="questions")
+router.register(
+    "transactiontypes", TransactionTypeListViewSet, basename="transactiontypes"
+)
+router.register("relationship", RelationshipChoicesListViewSet, basename="relationship")
 
 # Users App Api Registery
 router.register("users", UserViewSet)

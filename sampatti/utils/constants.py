@@ -48,6 +48,12 @@ class Templates:
     pass
 
 
+class ValidationErrors:
+    REQUIRED = "%s is required"
+    INVALID = "%s is invalid"
+    NOT_FOUND = "%s not found"
+
+
 class AppModel:
     USER = {
         "app_label": "users",
