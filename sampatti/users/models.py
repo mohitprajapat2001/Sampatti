@@ -11,6 +11,8 @@ from users.choices import (
 )
 from users.constants import USER_PROFILE_UPLOAD_MEDIA_PATH
 from cities_light.models import City
+from django.utils.timezone import now
+from django.utils import timesince
 
 
 def _user_profile_image(self, filename) -> str:
@@ -44,8 +46,6 @@ class User(AbstractUser):
 class UserDetail(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="detail")
     secondary_email = models.EmailField(null=True, blank=True, max_length=255)
-    phone_number = PhoneNumberField(null=True, blank=True, region="IN")
-    secondary_phone_number = PhoneNumberField(null=True, blank=True, region="IN")
     date_of_birth = models.DateField(null=True, blank=True)
     gender = models.CharField(
         max_length=10, choices=GenderChoices.CHOICES, null=True, blank=True
@@ -58,6 +58,33 @@ class UserDetail(models.Model):
     class Meta:
         verbose_name = "User Detail"
         verbose_name_plural = "User Details"
+
+    @property
+    def age(self):
+        """
+        Calculate the age of the user based on date_of_birth.
+        """
+        if self.date_of_birth:
+            today = now().date().today()
+            return (
+                today.year
+                - self.date_of_birth.year
+                - (
+                    (today.month, today.day)
+                    < (self.date_of_birth.month, self.date_of_birth.day)
+                )
+            )
+        return None
+
+    @property
+    def age_nicely(self):
+        """
+        Calculate the age of the user based on date_of_birth in a human-readable format.
+        """
+        if self.date_of_birth:
+            today = now().date().today()
+            return timesince.timesince(self.date_of_birth, today)
+        return None
 
 
 class Profile(models.Model):

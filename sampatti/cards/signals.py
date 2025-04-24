@@ -6,6 +6,7 @@ import random
 from django.utils.timezone import now, timedelta
 
 Card = get_model(**AppModel.CARD)
+GiftCard = get_model(**AppModel.GIFTCARD)
 
 
 @receiver(post_save, sender=Card)
@@ -40,3 +41,24 @@ def card_post_save(sender, instance, created, **kwargs):
         instance._expiry_date = now() + timedelta(days=(365 * 5 + 1))
         instance._cvv = "".join([str(random.randint(0, 9)) for _ in range(3)])
         instance.save(update_fields=["card_number", "_expiry_date", "_cvv"])
+
+
+@receiver(post_save, sender=GiftCard)
+def gift_card_post_save(sender, instance, created, **kwargs):
+    """
+    Signal to update the Gift Card number after saving the Gift Card instance.
+    :param sender: The model class that sent the signal.
+    :param instance: The actual instance being saved.
+    :param created: Boolean; True if a new record was created.
+    constraint: The signal is sent after the instance is saved.
+    1. length of Card number should be 16 characters.
+    2. Card number should be unique.
+    3. Card number should not be empty.
+    """
+    if created:
+        value = "".join([str(random.randint(0, 9)) for _ in range(16)])
+        while not GiftCard.objects.filter(card_number=value).exists():
+            instance.card_number = "".join(
+                [str(random.randint(0, 9)) for _ in range(16)]
+            )
+            instance.save(update_fields=["card_number"])
