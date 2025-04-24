@@ -9,3 +9,4 @@ class ValidationErrors:
     """
 
     INVALID_CREDENTAILS = _("Email or password is incorrect")
+    PASSWORD_MISMATCH = _("Password and confirm password do not match.")

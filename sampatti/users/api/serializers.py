@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from utils.utils import get_model
 from utils.constants import AppModel
+from django.contrib.auth.password_validation import validate_password
+from users.constants import ValidationErrors
 
 User = get_model(**AppModel.USER)
 UserDetail = get_model(**AppModel.USER_DETAIL)
@@ -11,6 +13,12 @@ SecurityQuestion = get_model(**AppModel.SECURITY_QUESTION)
 
 
 class UserSerializer(serializers.ModelSerializer):
+    confirm_password = serializers.CharField(
+        write_only=True,
+        style={"input_type": "password"},
+        required=True,
+    )
+
     class Meta:
         model = User
         fields = (
@@ -20,7 +28,40 @@ class UserSerializer(serializers.ModelSerializer):
             "status",
             "phone_number",
             "date_joined",
+            "password",
+            "confirm_password",
         )
+        extra_kwargs = {
+            "password": {
+                "write_only": True,
+                "style": {"input_type": "password"},
+            },
+            "status": {
+                "read_only": True,
+            },
+            "date_joined": {
+                "read_only": True,
+            },
+        }
+
+    def validate_password(self, value):
+        """
+        Validate the password field.
+        """
+        validate_password(value)
+        return value
+
+    def validate(self, attrs):
+        attrs = super().validate(attrs)
+        if attrs["password"] != attrs["confirm_password"]:
+            raise serializers.ValidationError(
+                {"confirm_password": ValidationErrors.PASSWORD_MISMATCH}
+            )
+        return attrs
+
+    def create(self, validated_data):
+        validated_data.pop("confirm_password")
+        return super().create(validated_data)
 
 
 class UserDetailSerializer(serializers.ModelSerializer):

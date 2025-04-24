@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from users.api.serializers import (
     UserSerializer,
     UserDetailSerializer,
@@ -18,12 +18,17 @@ EmergencyDetails = get_model(**AppModel.EMERGENCY_DETAILS)
 SecurityQuestion = get_model(**AppModel.SECURITY_QUESTION)
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class RegisterView(generics.CreateAPIView):
+    serializer_class = UserSerializer
+    permission_classes = ()
+
+
+class UserViewSet(generics.RetrieveUpdateDestroyAPIView, viewsets.GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
-class UserDetailViewSet(viewsets.ModelViewSet):
+class UserDetailViewSet(generics.RetrieveUpdateDestroyAPIView, viewsets.GenericViewSet):
     queryset = UserDetail.objects.all()
     serializer_class = UserDetailSerializer
 

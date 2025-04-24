@@ -14,8 +14,6 @@ AUTH_USER_MODEL = Settings.AUTH_USER_MODEL
 # Project Secret Key
 SECRET_KEY = env.get("SECRET_KEY")
 
-APPEND_SLASH = True
-
 # Cities Light
 CITIES_LIGHT_INCLUDE_COUNTRIES = ["IN"]
 
