@@ -52,3 +52,9 @@ EMAIL_USE_TLS = False  # use port 587
 EMAIL_PORT = EmailConfig.PORT_465 if EMAIL_USE_SSL else EmailConfig.PORT_587
 EMAIL_HOST_USER = env.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env.get("EMAIL_HOST_PASSWORD")
+
+
+# Superuser Configuration
+ADMIN_USER = env.get("ADMIN_USER")
+ADMIN_PASSWORD = env.get("ADMIN_PASSWORD")
+ADMIN_EMAIL = env.get("ADMIN_EMAIL")

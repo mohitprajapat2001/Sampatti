@@ -1,10 +1,10 @@
 from django.apps import AppConfig
 
 
-class UsersConfig(AppConfig):
+class CardsConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "users"
+    name = "cards"
 
     def ready(self):
         super().ready()
-        import users.signals  # noqa F401
+        import cards.signals  # noqa F401

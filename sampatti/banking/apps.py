@@ -1,10 +1,10 @@
 from django.apps import AppConfig
 
 
-class UsersConfig(AppConfig):
+class BankingConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "users"
+    name = "banking"
 
     def ready(self):
         super().ready()
-        import users.signals  # noqa F401
+        import banking.signals  # noqa: F401

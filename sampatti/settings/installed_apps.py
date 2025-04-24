@@ -11,6 +11,10 @@ THIRD_PARTY_APPS = [
 
 PROJECT_APPS = [
     "users.apps.UsersConfig",
+    "banking.apps.BankingConfig",
+    "fixed_deposits.apps.FixedDepositsConfig",
+    "upi.apps.UpiConfig",
+    "cards.apps.CardsConfig",
 ]
 DJANGO_APPS = [
     "django.contrib.admin",
