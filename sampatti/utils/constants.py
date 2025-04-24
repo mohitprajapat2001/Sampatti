@@ -1,5 +1,3 @@
-from django.utils.translation import gettext_lazy as _
-
 DD_MM_YYYY = "%d-%m-%Y"
 YYYY_MM_DD = "%Y-%m-%d"
 
@@ -100,6 +98,13 @@ class AppModel:
     GIFTCARD = {
         "app_label": "cards",
         "model_name": "GiftCard",
+    }
+
+    # Transactions App Labels
+
+    TRANSACTION = {
+        "app_label": "transactions",
+        "model_name": "Transaction",
     }
 
 

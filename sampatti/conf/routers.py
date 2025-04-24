@@ -7,6 +7,8 @@ from users.api.api import (
     EmergencyDetailsViewSet,
     SecurityQuestionViewSet,
 )
+from cards.api.api import CardViewSet, GiftCardViewSet
+from banking.api.api import BankViewSet, BranchViewSet, AccountViewSet
 
 router = DefaultRouter()
 
@@ -17,3 +19,13 @@ router.register("profile", ProfileViewSet)
 router.register("address", AddressViewSet)
 router.register("emerygency", EmergencyDetailsViewSet)
 router.register("security", SecurityQuestionViewSet)
+
+# Cards App Api Registery
+router.register("cards", CardViewSet)
+router.register("giftcards", GiftCardViewSet)
+
+
+# Banking App Api Registery
+router.register("bank", BankViewSet)
+router.register("branch", BranchViewSet)
+router.register("account", AccountViewSet)
