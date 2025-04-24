@@ -55,6 +55,26 @@ class AppModel:
         "app_label": "users",
         "model_name": "User",
     }
+    USER_DETAIL = {
+        "app_label": "users",
+        "model_name": "UserDetail",
+    }
+    PROFILE = {
+        "app_label": "users",
+        "model_name": "Profile",
+    }
+    ADDRESS = {
+        "app_label": "users",
+        "model_name": "Address",
+    }
+    EMERGENCY_DETAILS = {
+        "app_label": "users",
+        "model_name": "EmergencyDetails",
+    }
+    SECURITY_QUESTION = {
+        "app_label": "users",
+        "model_name": "SecurityQuestion",
+    }
 
     # Banking App Labels
 
