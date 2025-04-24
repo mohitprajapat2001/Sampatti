@@ -128,7 +128,7 @@ class EmergencyDetailsSerializer(CustomForeignKeySerializer):
         )
 
 
-class SecurityQuestionSerializer(serializers.ModelSerCustomForeignKeySerializerializer):
+class SecurityQuestionSerializer(CustomForeignKeySerializer):
     user = UserSerializer(read_only=True)
 
     class Meta:
