@@ -4,6 +4,7 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "cities_light",
     "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
     "phonenumber_field",
     "django_rq",
 ]
