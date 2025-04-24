@@ -23,7 +23,7 @@ class Branch(TimeStampedModel, ActivatorModel):
     """
 
     bank = models.ForeignKey(Bank, on_delete=models.CASCADE, related_name="branches")
-    branch = models.ForeignKey(
+    city = models.ForeignKey(
         City,
         on_delete=models.CASCADE,
         related_name="branches",

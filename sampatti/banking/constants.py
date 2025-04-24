@@ -17,3 +17,10 @@ class AccountType:
         (FIXED, _("Fixed")),
         (RECURRING, _("Recurring")),
     ]
+
+
+class ValidationErrors:
+    BANK_ID_REQUIRED = _("Bank id is required.")
+    BANK_NOT_FOUND = _("Bank not found")
+    BRANCH_ID_REQUIRED = _("Branch id is required")
+    BRANCH_NOT_FOUND = _("Branch Not Found")
