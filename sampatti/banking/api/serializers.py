@@ -1,5 +1,6 @@
 from utils.utils import get_model
 from utils.constants import AppModel
+from banking.constants import ValidationErrors
 from rest_framework import serializers
 from users.api.serializers import UserSerializer
 
@@ -29,6 +30,7 @@ class BranchSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "bank",
+            "city",
             "address",
             "code",
             "ifsc",
@@ -43,7 +45,20 @@ class BranchSerializer(serializers.ModelSerializer):
             "ifsc": {
                 "read_only": True,
             },
+            "city": {
+                "read_only": True,
+            },
         }
+
+    def validate(self, attrs):
+        attrs = super().validate(attrs)
+        if not self.initial_data.get("bank_id"):
+            raise serializers.ValidationError(ValidationErrors.BANK_ID_REQUIRED)
+        if not Bank.objects.filter(pk=self.initial_data.get("bank_id")).exists():
+            raise serializers.ValidationError(ValidationErrors.BANK_NOT_FOUND)
+        attrs["bank_id"] = self.initial_data.get("bank_id")
+        attrs["city_id"] = 1
+        return attrs
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -68,3 +83,13 @@ class AccountSerializer(serializers.ModelSerializer):
                 "read_only": True,
             },
         }
+
+    def validate(self, attrs):
+        attrs = super().validate(attrs)
+        if not self.initial_data.get("branch_id"):
+            raise serializers.ValidationError(ValidationErrors.BRANCH_ID_REQUIRED)
+        if not Branch.objects.filter(pk=self.initial_data.get("branch_id")).exists():
+            raise serializers.ValidationError(ValidationErrors.BRANCH_NOT_FOUND)
+        attrs["branch_id"] = self.initial_data.get("branch_id")
+        attrs["user_id"] = self.initial_data.get("user_id")
+        return attrs

@@ -62,3 +62,4 @@ def gift_card_post_save(sender, instance, created, **kwargs):
                 [str(random.randint(0, 9)) for _ in range(16)]
             )
             instance.save(update_fields=["card_number"])
+            break
