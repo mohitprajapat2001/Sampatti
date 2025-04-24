@@ -30,7 +30,9 @@ class Branch(TimeStampedModel, ActivatorModel):
         verbose_name="Branch",
     )
     address = models.TextField(verbose_name="Address", blank=True, null=True)
-    code = models.CharField(null=True, blank=True, verbose_name="Branch Code")
+    code = models.CharField(
+        max_length=4, null=True, blank=True, verbose_name="Branch Code"
+    )
     ifsc = models.CharField(
         unique=True, max_length=10, null=True, blank=True, verbose_name="IFSC Code"
     )
@@ -53,29 +55,8 @@ class Account(TimeStampedModel, ActivatorModel):
     account_type = models.CharField(
         max_length=10, choices=AccountType.CHOICES, default=AccountType.SAVINGS
     )
-    account_number = models.CharField(max_length=20, unique=True)
+    account_number = models.CharField(max_length=10, unique=True, null=True, blank=True)
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     def __str__(self):
         return f"{self.user.username} - {self.account_number}"
-
-
-class Loan(TimeStampedModel, ActivatorModel):
-    """
-    Model representing a loan.
-    """
-
-    user = models.ForeignKey(
-        "users.User", on_delete=models.CASCADE, related_name="loans"
-    )
-    branch = models.ForeignKey(
-        "banking.Branch", on_delete=models.CASCADE, related_name="loans"
-    )
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    interest_rate = models.DecimalField(max_digits=5, decimal_places=2)
-    tenure = models.IntegerField()
-    emi = models.DecimalField(max_digits=10, decimal_places=2)
-    emi_date = models.DateField()
-
-    def __str__(self):
-        return f"{self.user.username} - {self.amount}"

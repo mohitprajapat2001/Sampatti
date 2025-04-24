@@ -14,6 +14,7 @@ PROJECT_APPS = [
     "banking.apps.BankingConfig",
     "fixed_deposits.apps.FixedDepositsConfig",
     "upi.apps.UpiConfig",
+    "cards.apps.CardsConfig",
 ]
 DJANGO_APPS = [
     "django.contrib.admin",

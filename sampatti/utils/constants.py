@@ -66,6 +66,21 @@ class AppModel:
         "app_label": "banking",
         "model_name": "Branch",
     }
+    ACCOUNT = {
+        "app_label": "banking",
+        "model_name": "Account",
+    }
+
+    # Card App Labels
+
+    CARD = {
+        "app_label": "cards",
+        "model_name": "Card",
+    }
+    GIFTCARD = {
+        "app_label": "cards",
+        "model_name": "GiftCard",
+    }
 
 
 class FormClass:
