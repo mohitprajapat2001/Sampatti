@@ -14,7 +14,7 @@ def create_user_profile(sender, instance, created, **kwargs):
     Signal to create a user profile when a new user is created.
     """
     if created:
-        UserDetail.objects.filter(user=instance)
+        UserDetail.objects.create(user=instance)
         email = instance.email.split("@")[0]
         instance.username = EMAIL_BASED_USERNAME_EXIST % (
             email,

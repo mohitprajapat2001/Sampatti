@@ -9,6 +9,7 @@ from users.choices import (
     RelationshipChoices,
     QuestionChoices,
 )
+from django.utils.translation import gettext_lazy as _
 from users.constants import USER_PROFILE_UPLOAD_MEDIA_PATH
 from cities_light.models import City
 from django.utils.timezone import now
@@ -30,6 +31,20 @@ class User(AbstractUser):
     """
 
     email = models.EmailField(unique=True, verbose_name="Email Address")
+    username = models.CharField(
+        _("username"),
+        max_length=150,
+        unique=True,
+        help_text=_(
+            "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
+        ),
+        validators=[AbstractUser.username_validator],
+        error_messages={
+            "unique": _("A user with that username already exists."),
+        },
+        null=True,
+        blank=True,
+    )
     phone_number = PhoneNumberField(
         unique=True, null=True, blank=True, verbose_name="Phone Number", region="IN"
     )
