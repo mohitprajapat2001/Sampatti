@@ -35,7 +35,12 @@ class UserViewSet(generics.RetrieveUpdateDestroyAPIView, viewsets.GenericViewSet
         """
         action decorator to return authenticated user data
         """
-        serializer = UserDetailSerializer(self.request.user.detail)
+        try:
+            serializer = UserDetailSerializer(self.request.user.detail)
+        except UserDetail.DoesNotExist:
+            serializer = UserDetailSerializer(
+                UserDetail.objects.create(user=self.request.user)
+            )
         return Response(serializer.data, status=HTTPStatus.OK)
 
 
