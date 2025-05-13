@@ -9,6 +9,7 @@ from users.api.api import (
 )
 from cards.api.api import CardViewSet, GiftCardViewSet
 from banking.api.api import BankViewSet, BranchViewSet, AccountViewSet
+from transactions.api.api import TransactionsViewSet
 from conf.api.api import (
     CityListViewSet,
     CardTypeListViewSet,
@@ -58,3 +59,6 @@ router.register("giftcards", GiftCardViewSet)
 router.register("banks", BankViewSet)
 router.register("branches", BranchViewSet)
 router.register("accounts", AccountViewSet)
+
+# Transactions App Api Registery
+router.register("transactions", TransactionsViewSet)
