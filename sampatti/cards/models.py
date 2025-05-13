@@ -2,6 +2,7 @@ from django.db import models
 from django_extensions.db.models import TimeStampedModel, ActivatorModel
 from cards.constants import CardTypes
 from django.contrib.auth.hashers import make_password, check_password
+from django.utils.timezone import now, timedelta
 
 
 class Card(TimeStampedModel, ActivatorModel):
@@ -111,8 +112,8 @@ class GiftCard(TimeStampedModel):
         "users.User", on_delete=models.CASCADE, related_name="gift_cards"
     )
     card_number = models.CharField(max_length=16, unique=True)
-    balance = models.DecimalField(max_digits=10, decimal_places=2)
-    expiry_date = models.DateField()
+    balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    expiry_date = models.DateField(default=now() + timedelta(days=365 * 5))
 
     def __str__(self):
         return f"Gift Card - **** {self.card_number[-4:]}"

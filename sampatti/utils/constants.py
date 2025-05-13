@@ -1,5 +1,23 @@
+from django.utils.translation import gettext_lazy as _
+
 DD_MM_YYYY = "%d-%m-%Y"
 YYYY_MM_DD = "%Y-%m-%d"
+
+
+class ManagementConstants:
+    """
+    Management Constants
+    """
+
+    ADMIN_USER_CREATED_SUCCESSFULLY = _("Admin user created successfully.")
+    GROUP_CREATED = _("Group %s created successfully.")
+    GROUP_PERMISSIONS_ASSIGNED = _("Group %s permissions assigned successfully.")
+    INITIAL_SETTINGS_SET = _("Initial settings set successfully.")
+    FAKER_WARNING = _("Use this command only for development purposes.")
+    CREATING_FAKE_BRANCHES = _("Creating fake branches")
+    CREATING_FAKE_USERS = _("Creating fake users")
+    FAKER_DATA_CREATED = _("%s data created successfully.")
+    DOT = _(".")
 
 
 class Settings:

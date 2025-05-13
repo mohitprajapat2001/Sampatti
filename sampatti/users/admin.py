@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from utils.utils import get_model
 from utils.constants import AppModel
 
@@ -37,7 +38,7 @@ class UserSecurityQuestionInline(admin.StackedInline):
 
 
 @admin.register(User)
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(BaseUserAdmin):
     """
     Admin view for the User model.
     """
@@ -54,6 +55,7 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ("username", "email", "phone_number")
     list_filter = ("status",)
     ordering = ("-date_joined",)
+
     inlines = [
         UserDetailInline,
         UserProfileInline,

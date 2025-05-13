@@ -25,6 +25,9 @@ class UserSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "username",
+            "get_full_name",
+            "first_name",
+            "last_name",
             "email",
             "status",
             "phone_number",
@@ -36,12 +39,6 @@ class UserSerializer(serializers.ModelSerializer):
             "password": {
                 "write_only": True,
                 "style": {"input_type": "password"},
-            },
-            "status": {
-                "read_only": True,
-            },
-            "date_joined": {
-                "read_only": True,
             },
         }
 
@@ -62,13 +59,14 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data.pop("confirm_password")
-        return super().create(validated_data)
+        user = super().create(validated_data)
+        user.set_password(validated_data["password"])
+        user.save()
+        return user
 
 
 class UserDetailSerializer(CustomForeignKeySerializer):
-    user = UserSerializer(
-        read_only=True,
-    )
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = UserDetail

@@ -9,6 +9,9 @@ from users.api.serializers import (
 )
 from utils.utils import get_model
 from utils.constants import AppModel
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from http import HTTPStatus
 
 User = get_model(**AppModel.USER)
 UserDetail = get_model(**AppModel.USER_DETAIL)
@@ -26,6 +29,19 @@ class RegisterView(generics.CreateAPIView):
 class UserViewSet(generics.RetrieveUpdateDestroyAPIView, viewsets.GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    @action(methods=["GET"], detail=False)
+    def me(self, request, *args, **kwargs):
+        """
+        action decorator to return authenticated user data
+        """
+        try:
+            serializer = UserDetailSerializer(self.request.user.detail)
+        except UserDetail.DoesNotExist:
+            serializer = UserDetailSerializer(
+                UserDetail.objects.create(user=self.request.user)
+            )
+        return Response(serializer.data, status=HTTPStatus.OK)
 
 
 class UserDetailViewSet(generics.RetrieveUpdateDestroyAPIView, viewsets.GenericViewSet):
