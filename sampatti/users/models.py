@@ -12,8 +12,9 @@ from users.choices import (
 from django.utils.translation import gettext_lazy as _
 from users.constants import USER_PROFILE_UPLOAD_MEDIA_PATH
 from cities_light.models import City
-from django.utils.timezone import now
+from django.utils.timezone import now, timedelta
 from django.utils import timesince
+from transactions.constants import TransactionTypes
 
 
 def _user_profile_image(self, filename) -> str:
@@ -56,6 +57,81 @@ class User(AbstractUser):
     )
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
+
+    @property
+    def last_month_average_credit_transactions(self):
+        return (
+            self.transactions.filter(
+                transaction_type=TransactionTypes.DEPOSIT,
+                created__gt=now().date() - timedelta(days=56),
+                created__lte=now().date() - timedelta(days=28),
+            )
+            .aggregate(models.Avg("amount"))
+            .get("amount__avg")
+            or 0
+        )
+
+    @property
+    def last_month_average_debit_transactions(self):
+        return (
+            self.transactions.filter(
+                transaction_type=TransactionTypes.WITHDRAWAL,
+                created__gt=now().date() - timedelta(days=56),
+                created__lte=now().date() - timedelta(days=28),
+            )
+            .aggregate(models.Avg("amount"))
+            .get("amount__avg")
+            or 0
+        )
+
+    @property
+    def last_month_average_transfer_transactions(self):
+        return (
+            self.transactions.filter(
+                transaction_type=TransactionTypes.TRANSFER,
+                created__gt=now().date() - timedelta(days=56),
+                created__lte=now().date() - timedelta(days=28),
+            )
+            .aggregate(models.Avg("amount"))
+            .get("amount__avg")
+            or 0
+        )
+
+    @property
+    def this_month_average_credit_transactions(self):
+        return (
+            self.transactions.filter(
+                transaction_type=TransactionTypes.DEPOSIT,
+                created__month=now().month,
+            )
+            .aggregate(models.Avg("amount"))
+            .get("amount__avg")
+            or 0
+        )
+
+    @property
+    def this_month_average_debit_transactions(self):
+        return (
+            self.transactions.filter(
+                transaction_type=TransactionTypes.WITHDRAWAL,
+                created__month=now().month,
+            )
+            .aggregate(models.Avg("amount"))
+            .get("amount__avg")
+            or 0
+        )
+
+    @property
+    def this_month_average_transfer_transactions(self):
+        return (
+            self.transactions.filter(
+                transaction_type=TransactionTypes.TRANSFER,
+                created__month=now().month,
+            )
+            .aggregate(models.Avg("amount"))
+            .get("amount__avg")
+            or 0
+        )
 
 
 class UserDetail(models.Model):

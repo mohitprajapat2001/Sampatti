@@ -13,15 +13,32 @@ EmergencyDetails = get_model(**AppModel.EMERGENCY_DETAILS)
 SecurityQuestion = get_model(**AppModel.SECURITY_QUESTION)
 
 
-class UserSerializer(serializers.ModelSerializer):
+class BaseUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "username",
+            "get_full_name",
+            "email",
+            "status",
+            "last_month_average_credit_transactions",
+            "last_month_average_debit_transactions",
+            "last_month_average_transfer_transactions",
+            "this_month_average_credit_transactions",
+            "this_month_average_debit_transactions",
+            "this_month_average_transfer_transactions",
+        )
+
+
+class UserSerializer(BaseUserSerializer):
     confirm_password = serializers.CharField(
         write_only=True,
         style={"input_type": "password"},
         required=True,
     )
 
-    class Meta:
-        model = User
+    class Meta(BaseUserSerializer.Meta):
         fields = (
             "id",
             "username",

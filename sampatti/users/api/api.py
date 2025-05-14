@@ -1,5 +1,6 @@
 from rest_framework import viewsets, generics
 from users.api.serializers import (
+    BaseUserSerializer,
     UserSerializer,
     UserDetailSerializer,
     AddressSerializer,
@@ -41,6 +42,12 @@ class UserViewSet(generics.RetrieveUpdateDestroyAPIView, viewsets.GenericViewSet
             serializer = UserDetailSerializer(
                 UserDetail.objects.create(user=self.request.user)
             )
+        return Response(serializer.data, status=HTTPStatus.OK)
+
+    @action(methods=["GET"], detail=True)
+    def transaction_average(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = BaseUserSerializer(user)
         return Response(serializer.data, status=HTTPStatus.OK)
 
 

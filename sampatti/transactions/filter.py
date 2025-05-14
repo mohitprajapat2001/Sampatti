@@ -11,6 +11,10 @@ class TransactionFilter(filters.FilterSet):
     """
 
     q = filters.CharFilter(field_name="description", lookup_expr="icontains")
+    account = filters.NumberFilter(
+        field_name="account__account_anumber", lookup_expr="contains"
+    )
+    user = filters.NumberFilter(field_name="user__id", lookup_expr="exact")
 
     class Meta:
         model = Transaction
