@@ -4,6 +4,8 @@ from utils.constants import AppModel
 from django.contrib.auth.password_validation import validate_password
 from users.constants import ValidationErrors
 from utils.serializers import CustomForeignKeySerializer
+from django.utils.timezone import now, timedelta
+from utils.constants import DD_MM_YYYY
 
 User = get_model(**AppModel.USER)
 UserDetail = get_model(**AppModel.USER_DETAIL)
@@ -22,6 +24,17 @@ class BaseUserSerializer(serializers.ModelSerializer):
             "get_full_name",
             "email",
             "status",
+        )
+
+
+class UserAverageTransactionSerializer(BaseUserSerializer):
+    class Meta(BaseUserSerializer.Meta):
+        fields = (
+            "id",
+            "username",
+            "get_full_name",
+            "email",
+            "status",
             "last_month_average_credit_transactions",
             "last_month_average_debit_transactions",
             "last_month_average_transfer_transactions",
@@ -29,6 +42,51 @@ class BaseUserSerializer(serializers.ModelSerializer):
             "this_month_average_debit_transactions",
             "this_month_average_transfer_transactions",
         )
+
+
+class UserExpenseReportSerializer(BaseUserSerializer):
+    seven_days = serializers.SerializerMethodField()
+    one_month = serializers.SerializerMethodField()
+    three_month = serializers.SerializerMethodField()
+
+    class Meta(BaseUserSerializer.Meta):
+        fields = (
+            "id",
+            "username",
+            "get_full_name",
+            "email",
+            "status",
+            "seven_days",
+            "one_month",
+            "three_month",
+        )
+
+    def get_seven_days(self, obj):
+        seven_days_report = {}
+        for day in range(0, 7):
+            date = now().date() - timedelta(days=day)
+            seven_days_report[date.strftime(DD_MM_YYYY)] = obj.expense_report_days(day)
+        return seven_days_report
+
+    def get_one_month(self, obj):
+        one_month_report = {}
+        for day in range(0, 29):
+            date = now().date() - timedelta(days=day)
+            one_month_report[date.strftime(DD_MM_YYYY)] = obj.expense_report_days(day)
+        return one_month_report
+
+    def get_three_month(self, obj):
+        three_month_report = {}
+        for month in range(0, 3):
+            monthh = now().month - month
+            year = now().year
+            if monthh < 1:
+                year = year - 1
+                monthh = 12 + monthh
+            three_month_report[
+                now().strptime(f"01-{monthh}-{year}", DD_MM_YYYY).strftime(DD_MM_YYYY)
+            ] = obj.expense_report_month(month)
+        return three_month_report
 
 
 class UserSerializer(BaseUserSerializer):

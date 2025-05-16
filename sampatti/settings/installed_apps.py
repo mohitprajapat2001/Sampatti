@@ -8,6 +8,7 @@ THIRD_PARTY_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     "phonenumber_field",
     "django_rq",
+    "admin_auto_filters",
 ]
 
 

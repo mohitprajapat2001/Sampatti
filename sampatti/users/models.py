@@ -60,6 +60,13 @@ class User(AbstractUser):
 
     @property
     def last_month_average_credit_transactions(self):
+        """
+        Average credit transactions for the last month.
+
+        This method returns the average transactions for the last month
+        where the transaction type is credit (DEPOSIT).
+        """
+
         return (
             self.transactions.filter(
                 transaction_type=TransactionTypes.DEPOSIT,
@@ -73,6 +80,13 @@ class User(AbstractUser):
 
     @property
     def last_month_average_debit_transactions(self):
+        """
+        Average debit transactions for the last month.
+
+        This method returns the average transactions for the last month
+        where the transaction type is debit (WITHDRAWAL).
+        """
+
         return (
             self.transactions.filter(
                 transaction_type=TransactionTypes.WITHDRAWAL,
@@ -86,6 +100,13 @@ class User(AbstractUser):
 
     @property
     def last_month_average_transfer_transactions(self):
+        """
+        Average transfer transactions for the last month.
+
+        This method returns the average transactions for the last month
+        where the transaction type is transfer (TRANSFER).
+        """
+
         return (
             self.transactions.filter(
                 transaction_type=TransactionTypes.TRANSFER,
@@ -99,6 +120,13 @@ class User(AbstractUser):
 
     @property
     def this_month_average_credit_transactions(self):
+        """
+        Average credit transactions for the current month.
+
+        This method returns the average transactions for the current month
+        where the transaction type is credit (DEPOSIT).
+        """
+
         return (
             self.transactions.filter(
                 transaction_type=TransactionTypes.DEPOSIT,
@@ -111,6 +139,13 @@ class User(AbstractUser):
 
     @property
     def this_month_average_debit_transactions(self):
+        """
+        Average debit transactions for the current month.
+
+        This method returns the average transactions for the current month
+        where the transaction type is debit (WITHDRAWAL).
+        """
+
         return (
             self.transactions.filter(
                 transaction_type=TransactionTypes.WITHDRAWAL,
@@ -123,6 +158,13 @@ class User(AbstractUser):
 
     @property
     def this_month_average_transfer_transactions(self):
+        """
+        Average transfer transactions for the current month.
+
+        This method returns the average transactions for the current month
+        where the transaction type is transfer (TRANSFER).
+        """
+
         return (
             self.transactions.filter(
                 transaction_type=TransactionTypes.TRANSFER,
@@ -130,6 +172,29 @@ class User(AbstractUser):
             )
             .aggregate(models.Avg("amount"))
             .get("amount__avg")
+            or 0
+        )
+
+    def expense_report_days(self, timedelta_days: int = 0):
+        return (
+            self.transactions.filter(
+                created__date=now().date() - timedelta(days=timedelta_days),
+            )
+            .aggregate(models.Sum("amount"))
+            .get("amount__sum")
+            or 0
+        )
+
+    def expense_report_month(self, timedelta_month: int = 0):
+        month = now().month - timedelta_month
+        if month < 1:
+            month = 12 + month
+        return (
+            self.transactions.filter(
+                created__month=month,
+            )
+            .aggregate(models.Sum("amount"))
+            .get("amount__sum")
             or 0
         )
 

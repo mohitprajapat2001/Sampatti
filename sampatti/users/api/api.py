@@ -1,6 +1,7 @@
 from rest_framework import viewsets, generics
 from users.api.serializers import (
-    BaseUserSerializer,
+    UserAverageTransactionSerializer,
+    UserExpenseReportSerializer,
     UserSerializer,
     UserDetailSerializer,
     AddressSerializer,
@@ -46,8 +47,31 @@ class UserViewSet(generics.RetrieveUpdateDestroyAPIView, viewsets.GenericViewSet
 
     @action(methods=["GET"], detail=True)
     def transaction_average(self, request, *args, **kwargs):
+        """
+        Retrieves the average transactions for the specified user.
+
+        This API endpoint returns the average credit, debit, and transfer
+        transactions for the user identified by the provided primary key
+        in the URL. The data is serialized using the BaseUserSerializer
+        and returned in the response.
+        """
+
         user = self.get_object()
-        serializer = BaseUserSerializer(user)
+        serializer = UserAverageTransactionSerializer(user)
+        return Response(serializer.data, status=HTTPStatus.OK)
+
+    @action(methods=["GET"], detail=True)
+    def expense_report(self, request, *args, **kwargs):
+        """
+        Provides an expense report for the specified user.
+
+        This API endpoint returns an expense report for the user identified by
+        the provided primary key in the URL. The report includes details about
+        the user's spending patterns, categorized expenses, and other relevant
+        financial metrics. The data is serialized and returned in the response.
+        """
+        user = self.get_object()
+        serializer = UserExpenseReportSerializer(user)
         return Response(serializer.data, status=HTTPStatus.OK)
 
 
