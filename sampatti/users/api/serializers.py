@@ -5,7 +5,7 @@ from django.contrib.auth.password_validation import validate_password
 from users.constants import ValidationErrors
 from utils.serializers import CustomForeignKeySerializer
 from django.utils.timezone import now, timedelta
-from utils.constants import DD_MM_YYYY
+from utils.constants import YYYY_MM_DD
 
 User = get_model(**AppModel.USER)
 UserDetail = get_model(**AppModel.USER_DETAIL)
@@ -62,30 +62,39 @@ class UserExpenseReportSerializer(BaseUserSerializer):
         )
 
     def get_seven_days(self, obj):
-        seven_days_report = {}
+        seven_days_report = []
         for day in range(0, 7):
             date = now().date() - timedelta(days=day)
-            seven_days_report[date.strftime(DD_MM_YYYY)] = obj.expense_report_days(day)
+            seven_days_report.append(
+                {
+                    "date": date.strftime(YYYY_MM_DD),
+                    "value": obj.expense_report_days(day),
+                }
+            )
         return seven_days_report
 
     def get_one_month(self, obj):
-        one_month_report = {}
+        one_month_report = []
         for day in range(0, 29):
             date = now().date() - timedelta(days=day)
-            one_month_report[date.strftime(DD_MM_YYYY)] = obj.expense_report_days(day)
+            one_month_report.append(
+                {
+                    "date": date.strftime(YYYY_MM_DD),
+                    "value": obj.expense_report_days(day),
+                }
+            )
         return one_month_report
 
     def get_three_month(self, obj):
-        three_month_report = {}
-        for month in range(0, 3):
-            monthh = now().month - month
-            year = now().year
-            if monthh < 1:
-                year = year - 1
-                monthh = 12 + monthh
-            three_month_report[
-                now().strptime(f"01-{monthh}-{year}", DD_MM_YYYY).strftime(DD_MM_YYYY)
-            ] = obj.expense_report_month(month)
+        three_month_report = []
+        for day in range(0, 85):
+            date = now().date() - timedelta(days=day)
+            three_month_report.append(
+                {
+                    "date": date.strftime(YYYY_MM_DD),
+                    "value": obj.expense_report_days(day),
+                }
+            )
         return three_month_report
 
 
